@@ -46,10 +46,16 @@ namespace DDS2Tool
             FileAttributes pathAttributes = File.GetAttributes(@validPath);
 
             //detect whether its a directory or file
-            if ((pathAttributes & FileAttributes.Directory) == FileAttributes.Directory)
-                return "Directory";
+            if (File.Exists(validPath))
+                return "BIN File";
+            else if (Directory.Exists(validPath) && Directory.GetFiles(validPath, "*.bin").Length != 0 || Directory.GetFiles(validPath, "*.BIN").Length != 0) 
+                return "BIN Directory";
+            else if (Directory.Exists(validPath) && Directory.GetFiles(validPath, "*.dds").Length != 0 || Directory.GetFiles(validPath, "*.DDS").Length != 0)
+                return "DDS Directory";
             else
-                return "File";
+            {
+                return "";
+            }
         }
     }
 }

@@ -67,15 +67,22 @@ namespace DDS2Tool
                         string ddsName = Bin.ReadName(reader); //Get name
                         int ddsSize = Bin.ReadInt32(reader); //Get filesize
                         byte[] ddsFile = reader.ReadBytes(ddsSize); //Copy DDS file to byte array
-                        using (FileStream stream = new FileStream(
-                            $"{Path.GetDirectoryName(validPath)}\\{binName}\\{ddsName}", FileMode.Create))
+                        try
                         {
-                            using (BinaryWriter writer = new BinaryWriter(stream))
+                            using (FileStream stream = new FileStream(
+                                                        $"{Path.GetDirectoryName(validPath)}\\{binName}\\{ddsName}", FileMode.Create))
                             {
-                                writer.Write(ddsFile); //Put DDS file in a new DDS folder using filename from DDS2
+                                using (BinaryWriter writer = new BinaryWriter(stream))
+                                {
+                                    writer.Write(ddsFile); //Put DDS file in a new DDS folder using filename from DDS2
+                                }
                             }
                         }
-
+                        catch
+                        {
+                            Console.WriteLine($"{binName} did not contain a DDS2 file. Skipping...");
+                            break;
+                        }
                     }
                     reader.ReadBytes(20);
                 }
@@ -104,7 +111,7 @@ namespace DDS2Tool
                         Bin.PadDds2Name32(writer, ddsFiles, x); //Write DDS2 name and add padding after
                         int ddsSize1 = Bin.GetFileSize(ddsFiles[x]);
                         int ddsSize2 = Bin.GetFileSize(ddsFiles[x + 1]);
-                        int dds2Size = Bin.ConvertInt32(ddsSize1 + ddsSize2);
+                        int dds2Size = Bin.ConvertInt32(ddsSize1 + ddsSize2 + 96); //Add padding, fileinfo and junk data amount to total dds2 size
                         writer.Write(dds2Size); //Sets size of whole DDS2
                         writer.Write(Bin.ConvertInt32(2)); //Sets 2 as number of files inside DDS2
                         Bin.PadDdsName32(writer, ddsFiles, x); //Write first DDS name and add padding after

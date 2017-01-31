@@ -17,14 +17,28 @@ namespace DDS2Tool
             Console.WriteLine("-------------------------------------------------------------");
             string validPath = Validation.Path(args); //Make sure path or file exists
             string pathType = Validation.Type(validPath); //Find out if path is a file or a directory
-            if (pathType == "File") { //If path is a file, extract DDS files from it
+            if (pathType == "BIN File") { //If path is a file, extract DDS files from it
                 Bin.Extract(validPath);
                 Console.WriteLine("Extraction succeeded! Press any key to exit.");
                 Console.ReadKey();
             }
-            else if (pathType == "Directory") {
+            else if (pathType == "BIN Directory")
+            {
+                foreach (string bin in Directory.GetFiles(@validPath))
+                {
+                    Bin.Extract(bin);
+                }
+                Console.WriteLine("Extraction succeeded! Press any key to exit.");
+                Console.ReadKey();
+            }
+            else if (pathType == "DDS Directory") {
                 Bin.Create(validPath);
                 Console.WriteLine("BIN created! Press any key to exit.");
+                Console.ReadKey();
+            }
+            else
+            {
+                Console.WriteLine("No valid files or directories found!");
                 Console.ReadKey();
             }
             
