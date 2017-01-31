@@ -8,6 +8,6 @@ By **supplying the path to a BIN file**, you can extract all DXT1 and DXT5 image
 Note: This does not work on the early, unused portraits from the Persona 5 trailer.
 
 By **supplying a path to a folder with DDS images**, you can generate a new BIN file.
-Note: This will probably only work in-game if you keep the filenames the same, and don't add or remove DDS files. I'm not sure at this time if saving the DDS file with a different type of compression will matter, but try to stick to DXT1 and DXT5 if possible.
+Note: This will probably only work in-game if you keep the filenames the same, and don't add or remove DDS files. Try to stick to the same type of compression when saving DXT1 and DXT5 if possible.
 
 And finally, by **supplying a path to a folder with BIN files**, you can mass-extract all the DDS files. It will automatically skip any unused ones using DXT3.
