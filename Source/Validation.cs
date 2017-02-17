@@ -57,5 +57,23 @@ namespace DDS2Tool
                 return "";
             }
         }
+
+        public static bool CombinePrompt(ref bool combine)
+        {
+            bool validationLoop = true;
+            while (validationLoop == true)
+            {
+                Console.WriteLine("Would you like to combine the extracted DDS files into single PNGs? (y/n): ");
+                string input = Console.ReadLine().ToUpper();
+                if (input == "Y")
+                {
+                    validationLoop = false;
+                    combine = true;
+                }
+                else if (input == "N")
+                validationLoop = false;
+            }
+            return combine;
+        }
     }
 }

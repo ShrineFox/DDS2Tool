@@ -49,7 +49,7 @@ namespace DDS2Tool
             return length;
         }
 
-        public static void Extract(string validPath)
+        public static void Extract(string validPath, bool combine)
         {
             using (BinaryReader reader = new BinaryReader(File.Open(validPath, FileMode.Open)))
             {
@@ -87,6 +87,41 @@ namespace DDS2Tool
                     reader.ReadBytes(20);
                 }
             }
+            if (combine == true)
+            {
+                Bin.CombineExtracted(validPath);
+            }
+                       
+        }
+
+        public static void CombineExtracted(string binFile)
+        {
+            string folder = $"{Path.GetDirectoryName(binFile)}\\{Path.GetFileNameWithoutExtension(binFile)}";
+            List<string> ddsFiles = new List<string>();
+            foreach (string ddsFile in Directory.GetFiles(folder, "*.dds"))
+                {
+                ddsFiles.Add(ddsFile);
+                }
+                for (int i = 0; i < ddsFiles.Count; i++)
+                {
+                    Png.Convert(ddsFiles[i]);
+                }
+
+                List<string> pngFiles = new List<string>();
+                try
+                {
+                    foreach (string pngFile in Directory.GetFiles($"{folder}\\Png", "*.png"))
+                    {
+                        pngFiles.Add(pngFile);
+                    }
+                    for (int i = 0; i < pngFiles.Count; i++)
+                    {
+                        Png.Combine(pngFiles[i + 1], pngFiles[i]);
+                        i++;
+                    }
+                }
+                catch { }
+                
         }
 
         public static void Create(string validPath)
