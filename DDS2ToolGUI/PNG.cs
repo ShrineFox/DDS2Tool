@@ -8,26 +8,21 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 
-namespace DDS2Tool
+namespace DDS2ToolGUI
 {
     class Png
     {
         public static void Convert(string dds)
         {
             KUtility.DDSImage img = new KUtility.DDSImage(File.ReadAllBytes(dds));
-            var newFolder = $"{Path.GetDirectoryName(dds)}\\Png";
-            if (!Directory.Exists(newFolder))
-            {
-                Directory.CreateDirectory(newFolder);
-            }
 
             for (int i = 0; i < img.images.Length; i++)
             {
-                img.images[i].Save($"{newFolder}//{Path.GetFileNameWithoutExtension(dds)}.png", ImageFormat.Png);
+                img.images[i].Save($"{Path.GetDirectoryName(dds)}//{Path.GetFileNameWithoutExtension(dds)}.png", System.Drawing.Imaging.ImageFormat.Png);
             }
         }
 
-        public static void Combine(string png1, string png2)
+        public static void Combine(string png1, string png2, string outputPath)
         {
             Bitmap source1 = new Bitmap(png1, true);
             Bitmap source2 = new Bitmap(png2, true);
@@ -39,13 +34,15 @@ namespace DDS2Tool
             graphics.DrawImage(source1, 0, 0);
             graphics.DrawImage(source2, 0, 0);
 
-            var newFolder = $"{Path.GetDirectoryName(Path.GetDirectoryName(png1))}\\Combined";
-            if (!Directory.Exists(newFolder)) {
+            var newFolder = $"{outputPath}\\PNG";
+            if (!Directory.Exists(newFolder))
+            {
                 Directory.CreateDirectory(newFolder);
-                }
-            var newPath = $"{newFolder}\\{Path.GetFileNameWithoutExtension(png2)}";
+            }
+            var newPath = $"{newFolder}\\{Path.GetFileNameWithoutExtension(png2)}.png";
 
-            target.Save($"{newPath}.png", ImageFormat.Png);
+            target.Save(newPath, System.Drawing.Imaging.ImageFormat.Png);
         }
+
     }
 }
